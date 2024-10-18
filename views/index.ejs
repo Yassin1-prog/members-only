@@ -14,7 +14,14 @@
     />
   </head>
   <body class="bg-gray-100 min-h-screen flex flex-col">
-    <%- include('header') %>
+    <%- include('header') %> <% if (locals.user) {%>
+    <h1 class="text-yellow-600 text-center">
+      WELCOME BACK <%= user.username %>
+    </h1>
+    <a href="/log-out" class="text-blue-500 hover:text-blue-700 underline"
+      >LOG OUT</a
+    >
+    <% } %>
 
     <main class="flex-grow container mx-auto px-4 py-8">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -74,10 +81,10 @@
             class="bg-white rounded-lg shadow-md p-4 flex justify-between items-start"
           >
             <div>
-              <p class="text-gray-800"><%= message.text %></p>
+              <p class="text-gray-800"><%= message.message %></p>
               <p class="text-sm text-gray-500 mt-2">
-                <span class="font-semibold"><%= message.author %></span> - <%=
-                message.date %>
+                <span class="font-semibold"><%= message.username %></span> - <%=
+                message.created_at %>
               </p>
             </div>
             <form action="/delete-message/<%= message.id %>" method="POST">
