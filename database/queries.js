@@ -1,9 +1,21 @@
 const pool = require("../db");
 
-async function addUser({ firstname, lastname, username, password }) {
+async function getUser(username) {
+  const { rows } = await pool.query("SELECT * FROM users WHERE username = $1", [
+    username,
+  ]);
+  return rows[0];
+}
+
+async function getUserbyId(id) {
+  const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+  return rows[0];
+}
+
+async function addUser({ firstname, lastname, username, hashedpassword }) {
   await pool.query(
     "INSERT INTO users (firstname, lastname, username, password) VALUES ($1, $2, $3, $4)",
-    [firstname, lastname, username, password]
+    [firstname, lastname, username, hashedpassword]
   );
 }
 
@@ -30,10 +42,12 @@ async function addMessage(message, user_id) {
 }
 
 async function deleteMessage(id) {
-  await pool.query("DELETE FROM messages WHERE id = $1", [id]);
+  await pool.query("DELETE FROM messages WHERE messageid = $1", [id]);
 }
 
 module.exports = {
+  getUser,
+  getUserbyId,
   addUser,
   becomeMember,
   becomeAdmin,

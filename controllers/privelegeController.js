@@ -4,13 +4,14 @@ exports.newMember = async (req, res) => {
   const { passcode } = req.body;
   if (passcode == "one") {
     await db.becomeMember(req.params.id);
+    console.log(req.user);
     res.redirect("/");
   } else {
     res.render("joinclub", { wrong: "The passcode you entered is incorrect" });
   }
 };
 
-exports.newMember = async (req, res) => {
+exports.newAdmin = async (req, res) => {
   const { passcode } = req.body;
   if (passcode == "resu") {
     await db.becomeAdmin(req.params.id);

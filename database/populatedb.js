@@ -12,13 +12,15 @@ CREATE TABLE users (
 );
 
 CREATE TABLE messages (
-    id SERIAL PRIMARY KEY,
+    messageid SERIAL PRIMARY KEY,
     message TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_id INT REFERENCES users(id) ON DELETE CASCADE
 );
 
 `;
+
+const SQLcorrection = `ALTER TABLE messages RENAME COLUMN id TO messageid;`;
 
 async function main() {
   console.log("seeding...");

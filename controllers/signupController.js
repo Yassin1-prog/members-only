@@ -1,4 +1,5 @@
 const db = require("../database/queries");
+const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 
 const validateSignup = [
@@ -36,7 +37,7 @@ const validateSignup = [
     .matches(/[!@#$%^&*]/)
     .withMessage("Password must contain at least one special character"),
 
-  body("confirmPassword")
+  body("confirm-password")
     .trim()
     .custom((value, { req }) => value === req.body.password)
     .withMessage("Passwords do not match"),
@@ -51,7 +52,15 @@ exports.createUser = [
         errors: errors.array(),
       });
     }
+
     const { firstname, lastname, username, password } = req.body;
+    const duplicate = await db.getUser(username);
+    if (duplicate) {
+      return res.status(400).render("signup", {
+        err: "The username arleady exists, try a new one",
+      });
+    }
+
     bcrypt.hash(password, 10, async (err, hashedpassword) => {
       if (err) {
         return next(err);
