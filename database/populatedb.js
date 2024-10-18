@@ -20,8 +20,6 @@ CREATE TABLE messages (
 
 `;
 
-const SQLcorrection = `ALTER TABLE messages RENAME COLUMN id TO messageid;`;
-
 async function main() {
   console.log("seeding...");
   const client = new Client({
